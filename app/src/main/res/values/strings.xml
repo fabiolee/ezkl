@@ -1,4 +1,23 @@
 <resources>
-    <string name="app_name">mvp</string>
+    <string name="app_name">ezKL</string>
+
+    <string name="activity_list">List</string>
+    <string name="activity_qr_code_generator">QR Code Generator</string>
+    <string name="activity_qr_code_notifier">QR Code Notifier</string>
+
     <string name="action_settings">Settings</string>
+
+    <string name="label_generate">Generate</string>
+    <string name="label_in">In</string>
+    <string name="label_notify">Notify</string>
+    <string name="label_out">Out</string>
+    <string name="label_price">Price</string>
+    <string name="label_sms">SMS</string>
+    <string name="label_station">Station</string>
+    <string name="label_status">Status</string>
+
+    <string name="msg_param_is_empty">Status, Station or Price is empty?</string>
+    <string name="msg_sms_sent_fail">SMS fail to send.</string>
+    <string name="msg_sms_sent_success">SMS sent successfully.</string>
+    <string name="msg_thank_you">Thanks for using ezKL.</string>
 </resources>

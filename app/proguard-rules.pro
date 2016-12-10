@@ -1,3 +1,13 @@
+# Firebase Authentication
+-keepattributes Signature
+-keepattributes *Annotation*
+
+# Firebase Realtime Database
+-keepattributes Signature
+-keepclassmembers class com.fabiolee.architecture.mvp.model.bean.** {
+  *;
+}
+
 # Retrofit2
 # Platform calls Class.forName on types which do not exist on Android to determine platform.
 -dontnote retrofit2.Platform
