@@ -40,7 +40,7 @@
                 android:id="@+id/spinner_status"
                 android:layout_width="match_parent"
                 android:layout_height="?actionBarSize"
-                android:elevation="5dp" />
+                android:elevation="4dp" />
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
@@ -84,12 +84,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/label_generate" />
-
-            <Button
-                android:id="@+id/btn_sms"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/label_sms" />
 
         </LinearLayout>
 

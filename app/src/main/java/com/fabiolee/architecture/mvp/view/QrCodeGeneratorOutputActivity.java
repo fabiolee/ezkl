@@ -15,6 +15,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.fabiolee.architecture.mvp.R;
+import com.fabiolee.architecture.mvp.model.bean.SendMessageRequest;
+import com.fabiolee.architecture.mvp.model.bean.SendMessageResponse;
+import com.fabiolee.architecture.mvp.model.remote.RetrofitHelper;
+import com.fabiolee.architecture.mvp.model.remote.SmsService;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -32,14 +36,20 @@ import com.google.zxing.common.BitMatrix;
 
 import java.util.Arrays;
 
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
+
 /**
  * @author fabio.lee
  */
 public class QrCodeGeneratorOutputActivity extends AppCompatActivity {
     private static final String TAG = "QrCodeGeneratorOutput";
-    private static final String DATABASE_KEY = "scanner";
-    private static final String DATABASE_VALUE_DONE = "done";
-    private static final String DATABASE_VALUE_NEW = "new";
+    private static final String DATABASE_SMS_KEY = "sms";
+    private static final String DATABASE_SMS_VALUE = "";
+    private static final String DATABASE_SCANNER_KEY = "scanner";
+    private static final String DATABASE_SCANNER_VALUE_DONE = "done";
+    private static final String DATABASE_SCANNER_VALUE_NEW = "new";
 
     public static final int WIDTH = 400;
     public static final int HEIGHT = 400;
@@ -185,16 +195,44 @@ public class QrCodeGeneratorOutputActivity extends AppCompatActivity {
 
     private void writeAndReadDatabase() {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference reference = database.getReference(DATABASE_KEY);
-        reference.setValue(DATABASE_VALUE_NEW);
-        reference.addValueEventListener(new ValueEventListener() {
+        initSmsReference(database);
+        initScannerReference(database);
+    }
+
+    private void initSmsReference(FirebaseDatabase database) {
+        final DatabaseReference smsReference = database.getReference(DATABASE_SMS_KEY);
+        smsReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
                 String value = dataSnapshot.getValue(String.class);
                 Log.d(TAG, "Value is: " + value);
-                if (DATABASE_VALUE_DONE.equalsIgnoreCase(value)) {
+                if (!TextUtils.isEmpty(value)) {
+                    sendMessage(value);
+                    smsReference.setValue(DATABASE_SMS_VALUE);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Log.w(TAG, "Failed to read value.", error.toException());
+            }
+        });
+    }
+
+    private void initScannerReference(FirebaseDatabase database) {
+        DatabaseReference scannerReference = database.getReference(DATABASE_SCANNER_KEY);
+        scannerReference.setValue(DATABASE_SCANNER_VALUE_NEW);
+        scannerReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+                String value = dataSnapshot.getValue(String.class);
+                Log.d(TAG, "Value is: " + value);
+                if (DATABASE_SCANNER_VALUE_DONE.equalsIgnoreCase(value)) {
                     Toast.makeText(QrCodeGeneratorOutputActivity.this, R.string.msg_thank_you, Toast.LENGTH_SHORT)
                             .show();
                     finish();
@@ -207,5 +245,41 @@ public class QrCodeGeneratorOutputActivity extends AppCompatActivity {
                 Log.w(TAG, "Failed to read value.", error.toException());
             }
         });
+    }
+
+    private void sendMessage(String sms) {
+        SendMessageRequest request = new SendMessageRequest();
+        request.username = "ceo";
+        request.password = "9b55148c9acf5d400756ec35eede5ee7e078b0ef";
+        request.msgType = "text";
+        request.message = sms;
+        request.messageTo = "01128085427";
+        request.hashKey = "d4ea84745ab2eca7b32c2d1f4a02a669fe1f84cd";
+        RetrofitHelper retrofitHelper = new RetrofitHelper();
+        SmsService smsService = retrofitHelper.newSmsService();
+        smsService.sendMessage(request)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Subscriber<SendMessageResponse>() {
+                    @Override
+                    public void onCompleted() {
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.e(TAG, "#sendMessage() -> onError()", e);
+                        Toast.makeText(QrCodeGeneratorOutputActivity.this,
+                                R.string.msg_sms_sent_fail,
+                                Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onNext(SendMessageResponse sendMessageResponse) {
+                        Log.d(TAG, "response=" + sendMessageResponse);
+                        Toast.makeText(QrCodeGeneratorOutputActivity.this,
+                                R.string.msg_sms_sent_success,
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 }

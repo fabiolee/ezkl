@@ -21,6 +21,11 @@ import com.fabiolee.architecture.mvp.model.bean.SendMessageRequest;
 import com.fabiolee.architecture.mvp.model.bean.SendMessageResponse;
 import com.fabiolee.architecture.mvp.model.remote.RetrofitHelper;
 import com.fabiolee.architecture.mvp.model.remote.SmsService;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.Locale;
 
@@ -33,13 +38,76 @@ import rx.schedulers.Schedulers;
  */
 public class QrCodeGeneratorInputActivity extends AppCompatActivity {
     private static final String TAG = "QrCodeGeneratorInput";
+    private static final String DATABASE_SMS_KEY = "sms";
+    private static final String DATABASE_SMS_VALUE = "";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_qr_code_generator_input);
+        initFirebaseDatabase();
         initToolbar();
         initContent();
+    }
+
+    private void initFirebaseDatabase() {
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        final DatabaseReference smsReference = database.getReference(DATABASE_SMS_KEY);
+        smsReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+                String value = dataSnapshot.getValue(String.class);
+                Log.d(TAG, "Value is: " + value);
+                if (!TextUtils.isEmpty(value)) {
+                    sendMessage(value);
+                    smsReference.setValue(DATABASE_SMS_VALUE);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Log.w(TAG, "Failed to read value.", error.toException());
+            }
+        });
+    }
+
+    private void sendMessage(String sms) {
+        SendMessageRequest request = new SendMessageRequest();
+        request.username = "ceo";
+        request.password = "9b55148c9acf5d400756ec35eede5ee7e078b0ef";
+        request.msgType = "text";
+        request.message = sms;
+        request.messageTo = "01128085427";
+        request.hashKey = "d4ea84745ab2eca7b32c2d1f4a02a669fe1f84cd";
+        RetrofitHelper retrofitHelper = new RetrofitHelper();
+        SmsService smsService = retrofitHelper.newSmsService();
+        smsService.sendMessage(request)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Subscriber<SendMessageResponse>() {
+                    @Override
+                    public void onCompleted() {
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.e(TAG, "#sendMessage() -> onError()", e);
+                        Toast.makeText(QrCodeGeneratorInputActivity.this,
+                                R.string.msg_sms_sent_fail,
+                                Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onNext(SendMessageResponse sendMessageResponse) {
+                        Log.d(TAG, "response=" + sendMessageResponse);
+                        Toast.makeText(QrCodeGeneratorInputActivity.this,
+                                R.string.msg_sms_sent_success,
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
     private void initToolbar() {
@@ -53,7 +121,6 @@ public class QrCodeGeneratorInputActivity extends AppCompatActivity {
         final EditText priceEditText = (EditText) findViewById(R.id.et_price);
         final TextView errorTextView = (TextView) findViewById(R.id.tv_error);
         Button generateButton = (Button) findViewById(R.id.btn_generate);
-        Button smsButton = (Button) findViewById(R.id.btn_sms);
         FloatingActionButton notifyButton = (FloatingActionButton) findViewById(R.id.btn_notify);
 
         ArrayAdapter<CharSequence> statusSpinnerAdapter = ArrayAdapter.createFromResource(this,
@@ -76,47 +143,6 @@ public class QrCodeGeneratorInputActivity extends AppCompatActivity {
                             station,
                             price));
                 }
-            }
-        });
-        smsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View view) {
-                view.setEnabled(false);
-                SendMessageRequest request = new SendMessageRequest();
-                request.username = "ceo";
-                request.password = "9b55148c9acf5d400756ec35eede5ee7e078b0ef";
-                request.msgType = "text";
-                request.message = "Testing";
-                request.messageTo = "0169006059";
-                request.hashKey = "0af7e3aee276e5387d237b5c2533e378551f6171";
-                RetrofitHelper retrofitHelper = new RetrofitHelper();
-                SmsService smsService = retrofitHelper.newSmsService();
-                smsService.sendMessage(request)
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribeOn(Schedulers.io())
-                        .subscribe(new Subscriber<SendMessageResponse>() {
-                            @Override
-                            public void onCompleted() {
-                            }
-
-                            @Override
-                            public void onError(Throwable e) {
-                                Log.e(TAG, "#sendMessage() -> onError()", e);
-                                Toast.makeText(QrCodeGeneratorInputActivity.this,
-                                        R.string.msg_sms_sent_fail,
-                                        Toast.LENGTH_SHORT).show();
-                                view.setEnabled(true);
-                            }
-
-                            @Override
-                            public void onNext(SendMessageResponse sendMessageResponse) {
-                                Log.d(TAG, "response=" + sendMessageResponse);
-                                Toast.makeText(QrCodeGeneratorInputActivity.this,
-                                        R.string.msg_sms_sent_success,
-                                        Toast.LENGTH_SHORT).show();
-                                view.setEnabled(true);
-                            }
-                        });
             }
         });
         notifyButton.setOnClickListener(new View.OnClickListener() {
