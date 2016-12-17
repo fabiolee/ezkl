@@ -1,4 +1,4 @@
-package com.fabiolee.architecture.mvp.model.bean;
+package com.fabiolee.architecture.mvp.ezkl.model.bean;
 
 import io.realm.RealmModel;
 

@@ -1,4 +1,4 @@
-package com.fabiolee.architecture.mvp.model.remote;
+package com.fabiolee.architecture.mvp.ezkl.model.remote;
 
 import java.util.concurrent.TimeUnit;
 

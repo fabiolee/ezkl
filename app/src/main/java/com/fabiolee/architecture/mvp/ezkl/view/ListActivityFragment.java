@@ -1,4 +1,4 @@
-package com.fabiolee.architecture.mvp.view;
+package com.fabiolee.architecture.mvp.ezkl.view;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -6,7 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.fabiolee.architecture.mvp.R;
+import com.fabiolee.architecture.mvp.ezkl.R;
 
 /**
  * A placeholder fragment containing a simple view.

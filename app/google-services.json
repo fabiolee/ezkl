@@ -8,9 +8,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:454679439606:android:96f6f9573a883753",
+        "mobilesdk_app_id": "1:454679439606:android:9a90687fe2266c9b",
         "android_client_info": {
-          "package_name": "com.fabiolee.architecture.mvp"
+          "package_name": "com.fabiolee.architecture.mvp.ezkl"
         }
       },
       "oauth_client": [

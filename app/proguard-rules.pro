@@ -4,7 +4,7 @@
 
 # Firebase Realtime Database
 -keepattributes Signature
--keepclassmembers class com.fabiolee.architecture.mvp.model.bean.** {
+-keepclassmembers class com.fabiolee.architecture.mvp.ezkl.model.bean.** {
   *;
 }
 

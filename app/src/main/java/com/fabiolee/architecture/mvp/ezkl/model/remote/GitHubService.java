@@ -1,6 +1,6 @@
-package com.fabiolee.architecture.mvp.model.remote;
+package com.fabiolee.architecture.mvp.ezkl.model.remote;
 
-import com.fabiolee.architecture.mvp.model.bean.UserBean;
+import com.fabiolee.architecture.mvp.ezkl.model.bean.UserBean;
 
 import java.util.List;
 

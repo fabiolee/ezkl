@@ -1,4 +1,4 @@
-package com.fabiolee.architecture.mvp.view;
+package com.fabiolee.architecture.mvp.ezkl.view;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -9,7 +9,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.fabiolee.architecture.mvp.R;
+import com.fabiolee.architecture.mvp.ezkl.R;
 
 public class ListActivity extends AppCompatActivity {
 

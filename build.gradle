@@ -3,7 +3,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.2.2'
+        classpath 'com.android.tools.build:gradle:2.2.3'
         classpath 'com.google.gms:google-services:3.0.0'
         classpath "io.realm:realm-gradle-plugin:2.0.2"
     }
@@ -25,7 +25,7 @@ ext {
     minSdkVersion = 19
     targetSdkVersion = 25
     compileSdkVersion = 25
-    buildToolsVersion = '25.0.1'
+    buildToolsVersion = '25.0.2'
 
     // App dependencies
     espressoVersion = '2.2.2'
@@ -33,6 +33,6 @@ ext {
     playServiceVersion = '10.0.1'
     reactivexVersion = '1.2.1'
     retrofitVersion = '2.1.0'
-    supportLibraryVersion = '25.0.1'
+    supportLibraryVersion = '25.1.0'
     zxingVersion = '3.3.0'
 }

@@ -1,4 +1,4 @@
-package com.fabiolee.architecture.mvp.view;
+package com.fabiolee.architecture.mvp.ezkl.view;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,11 +16,11 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.fabiolee.architecture.mvp.R;
-import com.fabiolee.architecture.mvp.model.bean.SendMessageRequest;
-import com.fabiolee.architecture.mvp.model.bean.SendMessageResponse;
-import com.fabiolee.architecture.mvp.model.remote.RetrofitHelper;
-import com.fabiolee.architecture.mvp.model.remote.SmsService;
+import com.fabiolee.architecture.mvp.ezkl.R;
+import com.fabiolee.architecture.mvp.ezkl.model.bean.SendMessageRequest;
+import com.fabiolee.architecture.mvp.ezkl.model.bean.SendMessageResponse;
+import com.fabiolee.architecture.mvp.ezkl.model.remote.RetrofitHelper;
+import com.fabiolee.architecture.mvp.ezkl.model.remote.SmsService;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;

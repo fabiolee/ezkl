@@ -1,6 +1,6 @@
-package com.fabiolee.architecture.mvp.model.local;
+package com.fabiolee.architecture.mvp.ezkl.model.local;
 
-import com.fabiolee.architecture.mvp.model.bean.UserBean;
+import com.fabiolee.architecture.mvp.ezkl.model.bean.UserBean;
 
 import java.util.List;
 

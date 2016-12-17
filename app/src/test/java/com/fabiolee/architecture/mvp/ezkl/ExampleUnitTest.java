@@ -1,4 +1,4 @@
-package com.fabiolee.architecture.mvp;
+package com.fabiolee.architecture.mvp.ezkl;
 
 import org.junit.Test;
 

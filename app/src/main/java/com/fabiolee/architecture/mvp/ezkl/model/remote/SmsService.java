@@ -1,7 +1,7 @@
-package com.fabiolee.architecture.mvp.model.remote;
+package com.fabiolee.architecture.mvp.ezkl.model.remote;
 
-import com.fabiolee.architecture.mvp.model.bean.SendMessageRequest;
-import com.fabiolee.architecture.mvp.model.bean.SendMessageResponse;
+import com.fabiolee.architecture.mvp.ezkl.model.bean.SendMessageRequest;
+import com.fabiolee.architecture.mvp.ezkl.model.bean.SendMessageResponse;
 
 import retrofit2.http.Body;
 import retrofit2.http.POST;
